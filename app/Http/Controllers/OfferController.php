@@ -73,10 +73,14 @@ class OfferController extends Controller
 
     public function update(Request $request, $offer_id)
     {
-        $updateOffer = $this->_offerRepository->updateOffer($request, $offer_id);
-        $saveOfferCoordinates = $this->_coordinateRepository->updateGeocode($request, $this->type, $offer_id);
-        $saveOfferAddress = $this->_addressRepository->updateAddres($request, $this->type, $offer_id);
-        return redirect('/');
+        try {
+            $updateOffer = $this->_offerRepository->updateOffer($request, $offer_id);
+            $saveOfferCoordinates = $this->_coordinateRepository->updateGeocode($request, $this->type, $offer_id);
+            $saveOfferAddress = $this->_addressRepository->updateAddres($request, $this->type, $offer_id);
+            return redirect('/');
+        } catch (\Exception $e) {
+            return back()->with(['error' =>$e->getMessage()]);
+        }
     } 
 
     public function destroy($offer_id)
