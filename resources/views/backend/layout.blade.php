@@ -15,6 +15,11 @@
                 @if (session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
+                 @if (session('success'))
+                    <div class="col-md-12">
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    </div>
+                @endif
                 @yield('content')
             </div>
         </div>

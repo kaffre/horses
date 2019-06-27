@@ -14,7 +14,7 @@
 			<div class="col-3">
 			</div>   
 			<div class="col-1">
-				<p><a href="{{url('offer/'.$offer->id.'/delete')}}" class="btn btn-primary" role="button">Edytuj</a></p>
+				<p><a href="{{url('offer/'.$offer->id.'/edit')}}" class="btn btn-primary" role="button">Edytuj</a></p>
 			</div>  
 			<div class="col-1">
 				<form action="{{ url('/offer', ['id' => $offer->id]) }}" method="post">

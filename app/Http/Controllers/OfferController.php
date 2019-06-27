@@ -48,13 +48,15 @@ class OfferController extends Controller
 
     public function store(Request $request)
     {  
-        $offer_id = $this->_offerRepository->addOffer($request);
-        // $saveOfferCoordinates = $this->_coordinateRepository->saveGeocode($request, $this->type);
-        $saveOfferAddress = $this->_addressRepository->saveAddress($request, $this->type, $offer_id);
-
-        $this->_imageService->saveImage($request->file(), $this->type, $offer_id);
-
-        return back();
+        try {
+            $offer_id = $this->_offerRepository->addOffer($request);
+            // $saveOfferCoordinates = $this->_coordinateRepository->saveGeocode($request, $this->type);
+            $saveOfferAddress = $this->_addressRepository->saveAddress($request, $this->type, $offer_id);
+            $this->_imageService->saveImage($request->file(), $this->type, $offer_id);
+            return back()->with(['success' => 'Zapisano ofertę']);
+        } catch (\Exception $e) {
+            return back()->with(['error' =>$e->getMessage()]);
+        }
     }
 
     public function show($offer_id)
@@ -67,17 +69,18 @@ class OfferController extends Controller
     public function edit($offer_id)
     {
        $offer =  Offer::findOrFail($offer_id);
+       $categories = Category::all();
 
-       return view('backend.Offer.editOffer', ['offer' => $offer]);
+       return view('backend.Offer.editOffer', ['offer' => $offer, 'categories' => $categories]);
     }
 
     public function update(Request $request, $offer_id)
     {
         try {
             $updateOffer = $this->_offerRepository->updateOffer($request, $offer_id);
-            $saveOfferCoordinates = $this->_coordinateRepository->updateGeocode($request, $this->type, $offer_id);
+            // $saveOfferCoordinates = $this->_coordinateRepository->updateGeocode($request, $this->type, $offer_id);
             $saveOfferAddress = $this->_addressRepository->updateAddres($request, $this->type, $offer_id);
-            return redirect('/');
+            return back()->with(['success' => 'zaktualizowano ofertę']);
         } catch (\Exception $e) {
             return back()->with(['error' =>$e->getMessage()]);
         }
@@ -86,7 +89,7 @@ class OfferController extends Controller
     public function destroy($offer_id)
     {
         try {
-            $this->_offerRepository->destroyOffer(1222);
+            $this->_offerRepository->destroyOffer($offer_id);
             return back();
         } catch (\Exception $e) {
             return back()->with(['error' =>$e->getMessage()]);

@@ -1,7 +1,7 @@
 @extends('backend.layout')
 @section('content')
 {{-- @dd($offer->content); --}}
-<form method="POST" action="/updateOffer/{{$offer->id}}">
+<form method="POST" action="/offer/{{$offer->id}}">
 
 {{method_field('PATCH')}}
 	@csrf
@@ -9,10 +9,11 @@
 
     <div class="form-group">
         <label for="cateogryOffert">Kategoria</label>
-        <select class="form-control" id="cateogryOffert">
-           {{--  @foreach()
-                <option></option>
-            @endforeach --}}
+        <select class="form-control" id="cateogryOffert" name="category_id">
+            @foreach($categories as $category)
+                <option value="{{$category->id}}" 
+                    {{$category->id === $offer->category_id ? 'selected': ''}}>{{$category->name}}</option>
+            @endforeach
         </select>
     </div>
     <div class="form-group">
