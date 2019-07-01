@@ -13,10 +13,11 @@
 
 // Auth::routes();
 
-Route::group(['prefix' => 'admin_123456'], function () {
+Route::group(['prefix' => Config::get('constants.admin.prefix')], function () {
     Route::get('/offer', 'OfferController@listOffers');
+	Route::resource('/category', 'CategoriesController');
     Auth::routes();
 });
-Route::resource('category', 'CategoriesController');
+
 Route::resource('object', 'ObjectsController');
 Route::resource('offer', 'OfferController');

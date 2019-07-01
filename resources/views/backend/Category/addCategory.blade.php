@@ -1,6 +1,6 @@
 @extends('backend.layout')
 @section('content')
-<form method="POST" action="/category">
+<form method="POST" action="/{{Config::get('constants.admin.prefix')}}/category">
 
 	@csrf
 

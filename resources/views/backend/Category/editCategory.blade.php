@@ -1,6 +1,6 @@
 @extends('backend.layout')
 @section('content')
-<form method="POST" action="/category/{{$category->id}}">
+<form method="POST" action="/{{Config::get('constants.admin.prefix')}}/category/{{$category->id}}">
 {{method_field('PATCH')}}
 	@csrf
 

@@ -8,7 +8,7 @@
             <div class="col-md-1 menu">
                 <a href="{{url('object')}}" class="col-md-12">Obiekty</a>          
                 <a href="{{url('offer')}}" class="col-md-12">Oferty</a>         
-                <a href="" class="col-md-12">dupa1</a>            
+                <a href="{{url(Config::get('constants.admin.prefix').'/category')}}" class="col-md-12">Kategorie</a>            
                 <a href="" class="col-md-12">dupa2</a>            
             </div>
             <div class="col-md-11 content">
