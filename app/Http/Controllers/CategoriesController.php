@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Konie\Repositories\categoryRepository;
 use App\Category;
 
 class CategoriesController extends Controller
 {
+    protected $_categoryRepository;
 
-    public function __construct()
+    public function __construct(
+        categoryRepository $categoryRepository
+    )
     {
         $this->middleware('auth');
+        $this->_categoryRepository = $categoryRepository;
+        
     }
     /**
      * Display a listing of the resource.
@@ -19,7 +25,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        //
+        $categories = $this->_categoryRepository->getAllCategories();
+        return view('backend.category.listCategories', ['categories' => $categories]);
     }
 
     /**
@@ -40,8 +47,12 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        Category::create($request->all());
-        return back();
+        try {
+            $this->_categoryRepository->addCategory($request);
+            return back()->with(['success' => 'Zapisano kategorię']);
+        } catch (\Exception $e) {
+            return back()->with(['error' =>$e->getMessage()]);
+        }
     }
 
     /**
@@ -76,8 +87,12 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $category_id)
     {
-        $category = Category::findOrFail($category_id);
-        $category->update($request->all());
+        try {
+             $this->_categoryRepository->updateCategory($request, $category_id);
+            return back()->with(['success' => 'zaktualizowano kategorię']);
+        } catch (\Exception $e) {
+            return back()->with(['error' =>$e->getMessage()]);
+        }
     }
 
     /**
@@ -88,6 +103,11 @@ class CategoriesController extends Controller
      */
     public function destroy($category_id)
     {
-        //
+        try {
+            $this->_categoryRepository->destroyCategory($category_id);
+            return back();
+        } catch (\Exception $e) {
+            return back()->with(['error' => $e->getMessage()]);
+        }
     }
 }
