@@ -47,7 +47,7 @@ class ObjectsController extends Controller
 
     public function create()
     {
-        return view('backend.addObject');
+        return view('backend.Object.addObject');
     }
     
     public function store(Request $request)

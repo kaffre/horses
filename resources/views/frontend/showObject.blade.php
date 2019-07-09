@@ -1,10 +1,6 @@
 @extends('frontend.layout')
 @section('content')
-<div class="row">
-<div class="col-md-4">
-	asdasd
-</div>
-<div class="col-md-8">
+
 	<div class="object" style="text-align: center;"> 
 	<h3>{{$object->name}}</h3> 
 		<div class="images">
@@ -26,6 +22,5 @@
 	   
 	    <p><a href="{{redirect()->back()->getTargetUrl()}}" class="btn btn-primary" role="button">Wróć</a></p>
 	</div>	
-</div>
-</div>
+
 @endsection

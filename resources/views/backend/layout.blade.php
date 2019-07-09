@@ -1,6 +1,6 @@
 <html>
 <head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" crossorigin="anonymous">
 </head>
 <body>
     <div class="container-fluid">
@@ -11,11 +11,18 @@
                 <a href="{{url(Config::get('constants.admin.prefix').'/category')}}" class="col-md-12">Kategorie</a>            
                 <a href="" class="col-md-12">dupa2</a>            
             </div>
-            <div class="col-md-11 content">
-                @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
+           <div class="col-md-11 content">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
-                 @if (session('success'))
+
+                @if (session('success'))
                     <div class="col-md-12">
                         <div class="alert alert-success">{{ session('success') }}</div>
                     </div>

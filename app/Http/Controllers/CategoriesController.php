@@ -14,7 +14,7 @@ class CategoriesController extends Controller
         categoryRepository $categoryRepository
     )
     {
-        $this->middleware('auth');
+        $this->middleware('auth',['except' => ['listRelatedOffers']]);
         $this->_categoryRepository = $categoryRepository;
         
     }
@@ -109,5 +109,12 @@ class CategoriesController extends Controller
         } catch (\Exception $e) {
             return back()->with(['error' => $e->getMessage()]);
         }
+    }
+
+    public function listRelatedOffers($category_id)
+    {
+        $offers = $this->_categoryRepository->getOffersRelatedToCategory($category_id);
+        $categories = $this->_categoryRepository->getAllCategories();
+        return view('frontend.showOffers', ['offers' => $offers, 'categories' => $categories]);
     }
 }

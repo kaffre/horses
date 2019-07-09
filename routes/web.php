@@ -18,6 +18,6 @@ Route::group(['prefix' => Config::get('constants.admin.prefix')], function () {
 	Route::resource('/category', 'CategoriesController');
     Auth::routes();
 });
-
+Route::get('/category/{id}/offers', 'CategoriesController@listRelatedOffers');
 Route::resource('object', 'ObjectsController');
 Route::resource('offer', 'OfferController');

@@ -26,11 +26,16 @@ class categoryRepository
 
 	public function getAllCategories()
 	{
-		return Category::paginate(20);
+		return Category::all();
 	}
 
 	public function getCategoryById($category_id)
 	{
 		return Category::findOrFail($category_id);
+	}
+
+	public function getOffersRelatedToCategory($category_id)
+	{
+		return Category::findOrFail($category_id)->offer()->paginate(20);
 	}
 }
