@@ -37,4 +37,13 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Job');
     }
+
+    public function offer()
+    {
+        return $this->hasMany('App\Offer');
+    }
+    public function object()
+    {
+        return $this->hasMany('App\ObjectModel');
+    }
 }

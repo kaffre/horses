@@ -28,8 +28,10 @@ class Objects extends FormRequest
             'country' => 'required|min:3|max:25',
             'city' => 'required|min:3|max:25',
             'street' => 'required|min:3|max:20',
-            'number' => 'required|min:3|max:800',
-            'input_img1' => 'sometimes|required|image|dimensions:min_width=800,min_height=600'
+            'number' => 'required|min:1|max:10',
+            'description' => 'required|min:3|max:800',
+            'input_img.*' => 'sometimes|required|image'
+            // |dimensions:min_width=800,min_height=600
         ];
     }
 }

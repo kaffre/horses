@@ -6,36 +6,21 @@ use App\Offer;
 
 class offerRepository
 {
-	public function addOffer($Request)
+	public function addOffer($request)
 	{
-		$offer = new Offer([
-			'name' => $Request->name,
-			'content' => $Request->content,
-			'user_id' => Auth::user()->id,
-			'category_id' => $Request->category_id,
-			'position' => $Request->position
-		]);
-
-		$offer->save();
+		$offer = Auth::user()->offer()->create($request->all());
 		return $offer->id;
 	}
 
-	public function updateOffer($Request, $offerId)
+	public function updateOffer($request, $offerId)
 	{
 		$Offer = Offer::findOrFail($offerId);
-		$Offer->update([
-			'name' => $Request->name,
-			'content' => $Request->content,
-			'category_id' => $Request->category_id,
-			'position' => $Request->position
-		]);
-
-		$Offer->save();
+		$Offer->update($request->all());
 	}
 
 	public function destroyOffer($offer_id)
 	{
-	 	Offer::findOrFail($offer_id);
+	 	Offer::findOrFail($offer_id)->delete();
 	}
 
 	public function getAllOffers()

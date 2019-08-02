@@ -1,6 +1,6 @@
 @extends('backend.layout')
 @section('content')
-<form method="POST" action="/offer" enctype="multipart/form-data">
+<form method="POST" class="horsesForm" action="/offer" enctype="multipart/form-data">
 
 	@csrf
 
@@ -44,17 +44,40 @@
             <input name="number" value="{{ old('number') }}" type="text" class="form-control" id="number" placeholder="number">
         </div>
     </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label class="sr-only" for="">lat</label>
+            <input name="lat" value="{{ old('lat') }}" type="text" class="form-control" id="lat" placeholder="lat">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="sr-only" for="">lng</label>
+            <input name="lon" value="{{ old('lng') }}" type="text" class="form-control" id="lon" placeholder="lon">
+        </div>
+        <div class="form-group col-md-3">
+            <button id="getCoordinate" class="getCoordinate" ">coordy</button>
+        </div>
+    </div>
     <div class="form-group">
         <label class="sr-only" for="">Opis oferty pracy</label>
         <textarea name="content" type="text" class="form-control" id="content" placeholder="description">{{ old('content') }}</textarea>
     </div>
     <div class="form-group">
-        <input data-preview="#preview" name="input_img1" type="file" id="imageInput">
+        <div class="row imagesInForm">
+            <div class="col-md-3 divWithImage" id="imageDiv_0">
+                <input name="input_img[]" type="file" class="form-control" id="image_0" style="display: none;">
+                <label for="image_0">
+                    <img id="inputimage_0" src="{{url('/uploadImage.png')}}" alt="your image" width="200" height="200" />
+                </label>
+                <button type="button" name="remove" id="0" class="btn btn-danger btn_remove">X</button>
+            </div>
+        </div>
+        <button type="button" name="addImage" id="addImage" class="btn btn-success">Add More</button>
     </div>
 
     <div class="form-group">
         <input name="subbmit" value="Dodaj ofertę" type="submit" id="saveJobOffer" ">
     </div>
+    <input type="hidden" name="action" id="action" value="{{config::get('constants.admin.ajax_offer')}}" />
 
 </form>
 

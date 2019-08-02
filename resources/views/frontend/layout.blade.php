@@ -1,6 +1,10 @@
 <html>
 <head>
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" crossorigin="anonymous">
+	<link rel="stylesheet" href="{{ asset('css/simpleLightbox.min.css') }}" crossorigin="anonymous">
+	<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/simpleLightbox.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/images.js') }}"></script>
 </head>
 <body>
 	<div class="header">

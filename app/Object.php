@@ -27,9 +27,14 @@ class ObjectModel extends Model
     	return $this->morphOne('App\Address', 'addresstable');
     }
 
-    public function getAddress()
+    // public function getAddress()
+    // {
+    //    $a = Address::where('addresstable_id', '2')->get()->all();
+    //    return $a->id;
+    // }
+
+    public function user()
     {
-       $a = Address::where('addresstable_id', '2')->get()->all();
-       return $a->id;
+        return $this->belongsTo('App\User');
     }
 }

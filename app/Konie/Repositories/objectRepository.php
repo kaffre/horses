@@ -2,35 +2,33 @@
 namespace App\Konie\Repositories;
 
 use App\Konie\Gateways\ObjectGateway;
-
 use App\ObjectModel;
-
 use Illuminate\Support\Facades\Auth;
 
 class objectRepository	{
 
-	public function addObject($Request)
+	public function getAllObjects()
 	{
-		$object = new ObjectModel([
-			'name' => $Request->name,
-			'description' => $Request->description,
-			'user_id' => '1'
-		]);
+		$objects = ObjectModel::paginate(20);
 
-		$object->save();
+		return $objects;
+	}
+
+	public function addObject($request)
+	{
+		$object = Auth::user()->object()->create($request->all());
 		return $object->id;
 	}
 
-	public function updateObject($Request, $id)
+	public function updateObject($request, $object_id)
 	{
-		$Object = ObjectModel::findOrFail($id); 
-		$Object->update([
-			'name' => $Request->name,
-			'description' => $Request->description,
-			'user_id' => '1'
-		]);
+		$object = ObjectModel::findOrFail($object_id);
+		$object->update($request->all());
+	}
 
-		$Object->save();
+	public function destroyObject($object_id)
+	{
+	 	return ObjectModel::findOrFail($object_id)->delete();
 	}
 
 	public function getObjectById($object_id)
