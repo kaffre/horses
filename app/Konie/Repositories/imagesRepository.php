@@ -10,6 +10,7 @@ Class imagesRepository
 	public function saveImage($type, $id, $path) 
 	{
 		$type = "App\\".$type;
+		
 		$Typemodel = $type::findOrFail($id);
 		try {
 			$image = new Image(['name' => Storage::url($path)]);
@@ -17,5 +18,20 @@ Class imagesRepository
 		} catch(\Exception $e) {
 			return back()->withError($e->getMessage())->withInput();
 		}
+	}
+
+	public function deleteImage($imageId) 
+	{
+		try {
+			$image = Image::findOrFail($imageId);
+			$image->delete();
+		} catch(\Exception $e) {
+			return back()->withError($e->getMessage())->withInput();
+		}
+	}
+
+	public function findImageById($imageId)
+	{
+		return Image::findOrFail($imageId);
 	}
 }

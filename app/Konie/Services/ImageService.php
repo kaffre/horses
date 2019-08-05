@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Konie\Services;
 
 use App\Konie\Repositories\imagesRepository;
+use Illuminate\Support\Facades\Storage;
 
 Class ImageService
 {
@@ -10,21 +12,32 @@ Class ImageService
 		$this->_imageRepository = $imagesRepository;
 	}
 
-	public function saveImage($files, $type, $id) 
+	public function saveImage($request, $type, $id) 
 	{
-		//DODAĆ WYRZUCANIE BŁĘDÓW GDYBY JEDNAK SIĘ NIE UDAŁO ZAPISAĆ TRY CATCH
-		foreach ($files as $file) {
-			try{
-				$path = $file->storeAs('public/'.$type.'/'.$id, $file->getClientOriginalName());
-
-				$this->_imageRepository->saveImage($type, $id, $path);
-			} catch(\Exception $e) {
-				return back()->withError($e->getMessage())->withInput();
-			}
-
-				
+		foreach ($request->file()['input_img'] as $file) {
+			$path = $file->storeAs('public/'.$type.'/'.$id, $file->getClientOriginalName());
+			$this->_imageRepository->saveImage($type, $id, $path);
 		}
-			
+	}
 
+	public function updateImage($request, $type, $id) 
+	{
+
+		if (isset($request->imageForDelete)) {
+			$this->deleteImage($request);
+		}
+		if (!empty($request->file())) {
+			$this->saveImage($request, $type, $id);
+		}
+	}
+
+	protected function deleteImage($request)
+	{
+		foreach ($request->imageForDelete as $imageId) {
+			$image = $this->_imageRepository->findImageById($imageId);
+			$imagePathForDelete = str_replace('/storage', '/public', $image->name);
+			Storage::delete($imagePathForDelete);
+			$this->_imageRepository->deleteImage($imageId);
+		}
 	}
 }

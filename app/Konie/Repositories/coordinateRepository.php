@@ -4,48 +4,62 @@ namespace App\Konie\Repositories;
 use App\Konie\Gateways\ObjectGateway;
 use App\Coordinate;
 use Illuminate\Support\Facades\Auth;
+use App\Konie\Services\CoordinateServices;
+use Illuminate\Support\Facades\DB;
 
-class coordinateRepository {
+class coordinateRepository 
+{
+	protected $_coordinateServices;
 
-		public function getGeocodeByAddress($address)
-		{
-			$client = new \GuzzleHttp\Client();
-	   		$res = $client->get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address->city.','.$address->street.','.$address->number.'&key=AIzaSyCr7ELyM3lHacbZjB8o4ldEOeNmC0n4wco&sensor=false');
+	public function __construct(CoordinateServices $coordinateServices)
+	{
+		$this->_coordinateServices = $coordinateServices;
+	}
 
-			$resArray = json_decode($res->getBody(), true);
 
-			foreach ($resArray['results'] as $list) {
-				$lat = $list['geometry']['location']['lat'];
-				$lng = $list['geometry']['location']['lng'];
-			}
-			return array($lat, $lng);
-		}
+	public function saveGeocode($request, $type, $id)
+	{
+		$type = "App\\".$type;
 
-		public function saveGeocode($address, $type, $id)
-		{
-			$geocode = $this->getGeocodeByAddress($address);
-			$type = "App\\".$type;
+		$Typemodel = $type::findOrFail($id);
+		$coordinate = new Coordinate($request->all());
 
-			$Typemodel = $type::findOrFail($id);
-			$coordinate = new Coordinate([
-				'lat' => $geocode[0],
-				'lon' => $geocode[1]
-			]);
-			$save = $Typemodel->coordinate()->save($coordinate);
-		}		
+		$save = $Typemodel->coordinate()->save($coordinate);
+	}		
 
-		public function updateGeocode($address, $type, $id)
-		{
-			$geocode = $this->getGeocodeByAddress($address);
+	public function updateGeocode($request, $type, $id)
+	{
+		$type = "App\\".$type;
 
-			$type = "App\\".$type;
+		$Typemodel = $type::findOrFail($id);
+		$coordinate = new Coordinate($request->all());
+		$save = $Typemodel->save();
+	}
 
-			$Typemodel = $type::findOrFail($id);
-			$Typemodel->coordinate->update([
-				'lat' => $geocode[0],
-				'lon' => $geocode[1]
-			]);
-			$save = $Typemodel->save();
-		}
+	public function searchByDistans($coordinateForStarterPlace, $distance, $type)
+	{
+		// $object =  Coordinate::table("coordinates")->select("coordinatetable_id"
+  //       ,DB::raw("6371 * acos(cos(radians(".$coordinateForStarterPlace['lat'].")) 
+  //       * cos(radians(coordinates.lat)) 
+  //       * cos(radians(coordinates.lon) - radians(".$coordinateForStarterPlace['lng'].")) 
+  //       + sin(radians(".$coordinateForStarterPlace['lat'].")) 
+  //       * sin(radians(coordinates.lat))) AS distance"))
+  //       ->having('distance', '<', $distance)
+  //       ->where('coordinatetable_type', 'App\\'.$type)
+  //       ->groupBy("coordinates.id")
+  //       ->get();
+			$object =  Coordinate::select("coordinatetable_id"
+        ,DB::raw("6371 * acos(cos(radians(".$coordinateForStarterPlace['lat'].")) 
+        * cos(radians(coordinates.lat)) 
+        * cos(radians(coordinates.lon) - radians(".$coordinateForStarterPlace['lng'].")) 
+        + sin(radians(".$coordinateForStarterPlace['lat'].")) 
+        * sin(radians(coordinates.lat))) AS distance"))
+        ->having('distance', '<', $distance)
+        ->where('coordinatetable_type', 'App\\'.$type)
+        ->groupBy("coordinates.id")
+        ->get();
+
+        return $object;
+	}
 
 }

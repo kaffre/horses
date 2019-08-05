@@ -10,40 +10,22 @@ use Illuminate\Support\Facades\Auth;
 
 Class addressRepository	{
 
-		public function saveAddress($Request, $type, $id)
+		public function saveAddress($request, $type, $id)
 		{
 			$type = "App\\".$type;
-
-			try{
-				$Typemodel = $type::findOrFail($id);
-
-				$address = new Address([
-					'country' => $Request->country,
-					'city' => $Request->city,
-					'street' => $Request->street,
-					'number' => $Request->number,
-				]);
-				$save = $Typemodel->Address()->save($address);
-			} catch(\Exception $e) {
-				return back()->withError($e->getMessage())->withInput();
-			}
-
 			
+			$Typemodel = $type::findOrFail($id);
+			$address = new Address($request->all());
+			$Typemodel->Address()->save($address);
 		}
 
-		public function updateAddres($Request, $type, $id)
+		public function updateAddres($request, $type, $id)
 		{
 			$type = "App\\".$type;
 
 			$Typemodel = $type::findOrFail($id);
-			$Typemodel->address->update([
-				'country' => $Request->country,
-				'city' => $Request->city,
-				'street' => $Request->street,
-				'number' => $Request->number,
-			]);
-
-			$save = $Typemodel->save();
+			$Typemodel->address->update($request->all());
+			$Typemodel->save();
 		}
 
 

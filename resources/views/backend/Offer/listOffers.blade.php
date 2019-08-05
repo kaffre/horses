@@ -1,12 +1,13 @@
 @extends('backend.layout')
 @section('content')
 	@foreach($offers as $offer)
+
 		<div class="offer row" style="text-align: center;">    
 			<div class="col-1">
 				{{$offer->id}}
 			</div>   
 			<div class="col-2">
-				<img src="{{$offer->image->first()->name}}" height="50" width="50"/>
+				<img src="{{$offer->image->first()['name']}}" height="50" width="50"/>
 			</div>   
 			<div class="col-4">
 				<span>{{$offer->name}}</span>
@@ -24,6 +25,6 @@
 				</form>
 			</div>  
 		</div>
-	@endforeach	
 
+	@endforeach	
 @endsection
